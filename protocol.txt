@@ -1,0 +1,113 @@
+Protocol specification
+
+Put
+
+1. Client sends request to the server:  DONE
+
+one byte opcode in ASCII 'A' 
+two-byte integer, two's compliment and in network byte order, representing the length of the file name
+the filename in ASCII chracters
+four byte integer, two's compliment and in network byte order, representing the datasize of the file
+the size of the file in an INT
+
+2. Server reads request, if request opcode is 'A' response is as follows: 
+
+one byte opcode in ASCII 'B'
+ready to accept file
+
+
+2a. If opcode from client is A but server cannot accept file
+
+one byte opcode in ASCII 'Z'
+terminates connection with error message
+
+3. Client recieves response from server, if the response is B, the client sends
+
+The bytes of the file is sent to the server 
+
+
+Get
+
+1. Client sends request to the server:
+
+one byte opcode in ASCII 'C'
+two-byte integer, two's compliment and in network byte order, representing the length of the file name
+the filename in ASCII characters.
+four-byte integer, two's compliment and in network byte order, representing the length of the file
+the size of the file
+
+2. server reads request, if request opcode is 'C' response is as follows:
+
+one byte opcode in ASCII 'C'
+one byte ASCII ACK:
+0 - "Are you ready to send file? (y/n)?"
+
+3. client reads response from server - if they choose Y:
+
+one byte opcode in ASCII 'Y'
+
+3a. client reads response from server - if they choose N:
+
+one byte opcode in ASCII 'N'
+
+
+4. Server reads request, if request opcode is 'Y' response is as follows:
+
+
+the bytes of the file
+
+4a. Server reads request, if request opcode is 'Y' but there is an error:
+
+one byte opcode in ASCII 'D'
+one byte ASCII ACK from the following:
+-1 - file does not exist
+1 - file cannot be sent due to unknown error
+
+4b. Server reads request, if request opcode is 'N':
+
+closes connection***
+
+
+cd
+
+1. Client sends request to the server: DONE
+
+one byte opcode in ASCII 'E'
+two byte integer, two's compliment and in network byte order, representing the length of directory name
+the directory name in ASCII characters
+
+2. Server recieves response with opcode 'E'
+
+one byte opcode in ASCII 'E'
+one byte ASCII ACK from the following:
+-1 - directory failed to change
+0 - directory changed successfully
+
+
+dir
+
+1. Client sends request to server: DONE
+
+one byte opcode in ASCII 'F'
+
+2. Server recieves response with opcode 'F'
+
+one byte opcode in ASCII 'F'
+four byte interger, two's compliment and in network byte order, representing length of directory contents
+list of directory in ASCII characters
+
+
+pwd
+
+1. Client sends request to server: DONE
+
+one byte opcode in ASCII 'P'
+
+2. Server recieves response with opcode 'P'
+
+one byte opcode in ASCII 'P'
+two byte interger, two's compliment and in network byte order, representing length of current working directory
+name of current working directory in ASCII characters
+
+
+

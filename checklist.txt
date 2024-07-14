@@ -1,0 +1,83 @@
+Protocol specifications for:
+pwd - at least 2 messages (client -> server. {carrying command} Then. server -> client {respond with result}) - DONE
+dir - at least 2 messages (client -> server. {carrying command} Then. server -> client {respond with result}) - DONE 
+cd - at least 2 messages (client -> server. {carrying cd and new working directory}  Then. server -> client{successful change or not} ) - DONE
+
+get -  done
+put -  done
+
+Above protocols are provided in 'protocol.txt'
+
+currently working on implementing procotol.c and procotol.h to cater for these commands.
+
+===================================================================
+
+server compilation - so far
+server runs (with or without specified current directory in command line?) -> make capable for user to start server in a certain directory -  yet to be added
+handles multiple clients - done
+claims zombies - done
+generates logs -> server needs to log each client initiated operation aloing with major server operation (start up and shut down) - yet to be added
+
+client compilation - so far
+client runs with required command line syntax (hostname) - yes
+client side commands - lpwd, ldir, lcd - yes
+server side commands from client - pwd, dir, cd, get, put - completed pwd and dir
+get command (wip)
+server logs (wip)
+
+===================================================================
+
+Latest updates to server.c and client.c : 1.05pm 22/10
+
+implemented lcd, lpwd, ldir for client.c
+ensured server.c and client.c compile and run on localhost
+
+
+Update: 10.25pm 22/10
+
+confirmed that the client and server can send messages to one another over localhost
+implemented pwd and dir for server.c and client.c
+- there is mad spaghetti code that I will need to clean up
+- yet to implement cd (will not take long now that I have sussed the previous out)
+- will move all to a function 'servingClient'
+- no need for Hong's Stream.h and Stream.c
+
+- new versions will be made to cater for our protocol, protocol.h and protocol.c 
+- this must include the protocol for the 3 commands listed above along with put and get
+
+
+update: 7.40pm 23/10
+
+- Created function server_client
+- attempted cd implementation, can't get the server to respond to the 'cd' command.
+- will attempt to design and write protocol.h and protocol.c as we need this before implmenting get and put
+- we technically need this before implmenting dir and pwd, but they will be easy to modify as they are just 2 message transactions.
+
+
+update 7.40pm 24/10
+
+- Implemented most functions for Protocol.c and protocol.h
+- Reimplmented DIR and PWD to work with Protocol.c
+- currently working on implementing CD with protocol.c
+
+update: 1:25am 25/10
+
+-   added server logging (wip). im yet to log client interactions. logs are saved to "log.txt".
+-   added get command (wip). im trying to figure it out why its not working properly. it doesnt download the file at all ...
+-   added a makefile
+-   added a GET_CODE in protocol.h
+-   in client.c serverCmd(). added a method where it seperates the command to tokens. 
+    it seperates by spaces. thing is if a filename has spaces it will seperate them too. any ideas how to implement this better?
+
+update: 5:50pm 25/10
+-   get is working but file received has different size from the original.
+
+update: 5:56pm 26/10
+-   get and put implementation is complete. but not thoroughly tested. i've only tested .txt and .png (its working)
+-   get and put is not up to network protocol spec yet.
+-   ignore the server's printfs they are just there for debugging purposes. will change this later on to output to logfile
+
+
+
+
+
